@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import {
+  clear,
+  countSelector,
+  decrease,
+  increase,
+  updatedAtSelector,
+} from './reducers/counter';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -6,25 +15,24 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  public counter: number = 0;
-  public updatedAt?: number;
+  public count$: Observable<number> = this.store.select(countSelector);
+  public updatedAt$: Observable<number | undefined> =
+    this.store.select(updatedAtSelector);
+  public countDecrease$: Observable<boolean> = this.count$.pipe(
+    map((count) => count <= 0)
+  );
 
-  public get countDecrease(): boolean {
-    return this.counter <= 0;
-  }
+  constructor(private store: Store) {}
 
   public increase(): void {
-    this.updatedAt = Date.now();
-    this.counter++;
+    this.store.dispatch(increase());
   }
 
   public decrease(): void {
-    this.updatedAt = Date.now();
-    this.counter--;
+    this.store.dispatch(decrease());
   }
 
   public clear(): void {
-    this.updatedAt = Date.now();
-    this.counter = 0;
+    this.store.dispatch(clear());
   }
 }

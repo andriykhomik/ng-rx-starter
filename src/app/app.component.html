@@ -1,14 +1,22 @@
 <button (click)="increase()" class="fz-40 p-50 m-20">+1</button>
-<button (click)="decrease()" [disabled]="countDecrease" class="fz-40 p-50 m-20">
+<button
+  (click)="decrease()"
+  [disabled]="countDecrease$ | async"
+  class="fz-40 p-50 m-20"
+>
   -1
 </button>
-<button (click)="clear()" [disabled]="countDecrease" class="fz-40 p-50 m-20">
+<button
+  (click)="clear()"
+  [disabled]="countDecrease$ | async"
+  class="fz-40 p-50 m-20"
+>
   =0
 </button>
 
 <div>
-  <p class="fz-40">Counter is: {{ counter }}</p>
-  <p class="fz-40" *ngIf="!!updatedAt">
+  <p class="fz-40">Counter is: {{ count$ | async }}</p>
+  <p class="fz-40" *ngIf="updatedAt$ | async as updatedAt">
     Updated at: {{ updatedAt | date: "HH:mm:ss" }}
   </p>
 </div>
